@@ -1,0 +1,52 @@
+@(message: String) @main("Number guess") {
+
+<table>
+ <tr>
+  <td><strong>Last result</strong></td>
+  <td id="wonTd"></td>
+ </tr>
+ <tr>
+  <td><strong>Total number of games</strong></td>
+  <td id="gamesTd"></td>
+ </tr>
+ <tr>
+  <td><strong>Total number of wins</strong></td>
+  <td id="winsTd"></td>
+ </tr>
+ <tr>
+  <td><strong>Total number of losses</strong></td>
+  <td id="lossesTd"></td>
+ </tr>
+ <tr>
+  <td><strong>Actual message</strong></td>
+  <td id="msgTd">@message</td>
+ </tr>
+</table>
+<input type="text" id="guessText" />
+<button type="button" class="clickable" id="guessBtn">Guess!</button>
+<button type="button" class="clickable" id="resetBtn">Reset game!</button>
+<br>
+<strong><i>Debug messages: </i></strong>
+<i id="debugPanel"></i>
+
+<script type="text/javascript">
+
+ var successFn = function(data) { 
+  $("#wonTd").text(data["youWon"]);
+  $("#gamesTd").text(data["totalGames"]);
+  $("#winsTd").text(data["wins"]);
+  $("#lossesTd").text(data["losses"]);
+  $("#msgTd").text(data["message"]);
+  $("#debugPanel").text("");
+ };
+ var errorFn = function(data) { 
+  $("#debugPanel").text(JSON.stringify(data));
+ };
+
+ document.getElementById("guessBtn").onclick = function () { jsRoutes.controllers.Application.guess(document.getElementById('guessText').value).ajax({
+  success : successFn,
+  error : errorFn }); };
+ document.getElementById("resetBtn").onclick = function () { jsRoutes.controllers.Application.resetGame().ajax({
+  success : successFn }); };
+</script>
+}
